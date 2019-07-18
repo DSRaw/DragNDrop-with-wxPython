@@ -37,15 +37,20 @@ class DD_Tail(wx.Button):
     #These variables use self because they must be used in later functions, but aren't initialized until, and must be reassigned on every new L-click event.
     def on_click(self, event):
         self.btn_start_pos = event.GetEventObject().GetPosition()
-        self.delta = self.parent.ScreenToClient(wx.GetMousePosition()) - self.btn_start_pos 
+        self.delta = self.parent.ScreenToClient(wx.GetMousePosition()) - self.btn_start_pos
+        #self.drag_temp = Drag_Frame(self.p_panel, pos = self.parent.ClientToScreen(self.btn_start_pos)) #btn pos is in terms of panel, but DragFrame is in terms of screen. Conversion necessary
+        
         event.Skip()
         
     def on_drag(self, event):
         if(event.Dragging() and event.LeftIsDown()):
             m_pos = self.parent.ScreenToClient(wx.GetMousePosition())   #This is repeated because we now need to get the mouse's changing position as long as the button is in a dragging state
             new_pos = m_pos - self.delta    #We subtract delta to ensure the button origin stays the same distance relative to the mouse's changing position as it was when 1st clicked.
-            self.Move(new_pos)  #If we just set new_pos to where the mouse's current position is, the button origin would jump to the cursor's point. Such movement is jittery & unnatural.
-
+            btn_scrn_pos = self.parent.ClientToScreen(self.btn_start_pos)
+            #self.Move(new_pos)  #If we just set new_pos to where the mouse's current position is, the button origin would jump to the cursor's point. Such movement is jittery & unnatural.
+            self.drag_temp = Drag_Frame(self.p_panel, btn_scrn_pos, self.delta) #btn pos is in terms of panel, but DragFrame is in terms of screen. Conversion necessary
+        
+            '''Try shoving Drag_Frame inside of this class by bringing all our varaibles and attributes together'''
         event.Skip()
         
     #Once finished dragging, either snap the button back to it's original position from this click event cycle, or check if it was dragged to a matching drop button:
@@ -54,7 +59,38 @@ class DD_Tail(wx.Button):
         
         event.Skip()
 
-class DD_Frame(wx.Frame):
+class Drag_Frame(wx.Frame):
+    def __init__(self, parent, pos, delta):
+        super().__init__(parent, title='borderless', pos=pos, style=wx.BORDER_NONE | wx.FRAME_FLOAT_ON_PARENT)
+        self.btn = wx.Button(self, label="dragging")
+        
+        self.og_pos = pos
+        self.delta = delta
+        
+        self.sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.sizer.Add(self.btn, 1, wx.ALL | wx.EXPAND)
+        self.SetSizerAndFit(self.sizer)
+        
+        self.btn.Bind(wx.EVT_MOTION, self.on_drag)
+        self.btn.Bind(wx.EVT_LEFT_UP, self.on_release)
+        
+        self.Show()
+        
+    def on_drag(self, event):
+        print("entered ondrag")
+        if(event.Dragging() and event.LeftIsDown()):
+            print("entered if")
+            m_pos = wx.GetMousePosition()
+            new_pos = m_pos - self.delta
+            self.Move(new_pos)
+        event.Skip()
+        
+    def on_release(self, event):
+        self.Destroy()
+        
+        event.Skip()
+    
+class Top_Frame(wx.Frame):
     def __init__(self):
         super().__init__(parent=None, title='Sup')
         self.top_panel = wx.Panel(self)
@@ -67,12 +103,14 @@ class DD_Frame(wx.Frame):
         self.top_sizer.Add(self.drag_sizer, 1, wx.ALL | wx.EXPAND)
         self.top_panel.SetSizer(self.top_sizer)
         
+        #self.dd_frame = Drag_Frame(self)
+        
     def get_top_panel(self):
         return self.top_panel
 
 if __name__ == '__main__':
     DD_app = wx.App()
-    DD_window = DD_Frame()
+    DD_window = Top_Frame()
     donkeybtn = DD_Donkey(DD_window, "foobar")
     tailbtn = DD_Tail(DD_window, "fizzbuzz")
     DD_window.Show()
