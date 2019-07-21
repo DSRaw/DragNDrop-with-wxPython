@@ -8,11 +8,11 @@ Several superfluous classes have been removed and integrated into a single class
 
 *MatchPair's functionality:*
 
-__Allows dynamic insertion of matching pairs of buttons into a parent Frame
+__Allows dynamic insertion of matching pairs of buttons into a parent Frame__
 
   Achieved by creating instances of MatchPair that receive a parent Frame parameter
   
-__Facilitates a custom drag and drop cycle
+__Facilitates a custom drag and drop cycle__
 
   Uses a separate Frame to visually represent dragging without actually affecting the position of the buttons in the parent Frame
   
@@ -22,7 +22,7 @@ __Facilitates a custom drag and drop cycle
   
   *Concerns: there can be glitchy behavior when the Frame's focus is unexpectedly pulled away by the host OS's GUI. There are some WIP events handlers to assuage the worst of these issues*
   
-__Completely encapsulated checking of matching pairs of draggable buttons and their drop targets
+__Completely encapsulated checking of matching pairs of draggable buttons and their drop targets__
 
   Checking for matches between the buttons being dragged and their target buttons is integrated into the drag and drop event cycle. Because all of this is instanced when a MatchPair object is created, the correct pairs of buttons will always only enter a matched state with each other, meaning checking for matches is achievable entirely within a single object without requiring cross-talk between non-matching pairs.
   
