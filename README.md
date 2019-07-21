@@ -9,17 +9,21 @@ Several superfluous classes have been removed and integrated into a single class
 MatchPair's functionality:
 1)Allows dynamic insertion of matching pairs of buttons into a parent Frame
 
-  *Achieved by creating instances of MatchPair that receive a parent Frame parameter
+  Achieved by creating instances of MatchPair that receive a parent Frame parameter
   
 2)Facilitates a custom drag and drop cycle
-  *uses a separate Frame to visually represent dragging without actually affecting the position of the buttons in the parent Frame
-  *This achieves far smoother movement during dragging than trying to change the position of just the original button
-  *However, this also requires handing events off from the original button object to events bound to the new Frame's child button
-  *Concerns: there can be glitchy behavior when the Frame's focus is unexpectedly pulled away by the host OS's GUI. There are some WIP events handlers to assuage the worst of these issues
-  
-2)Completely encapsulated checking of matching pairs of draggable buttons and their drop targets
 
-  *Checking for matches between the buttons being dragged and their target buttons is integrated into the drag and drop event cycle. Because all of this is instanced when a MatchPair object is created, the correct pairs of buttons will always only enter a matched state with each other, meaning checking for matches is achievable entirely within a single object without requiring cross-talk between non-matching pairs.
+  Uses a separate Frame to visually represent dragging without actually affecting the position of the buttons in the parent Frame
+  
+  This achieves far smoother movement during dragging than trying to change the position of just the original button
+  
+  However, this also requires handing events off from the original button object to events bound to the new Frame's child button
+  
+  Concerns: there can be glitchy behavior when the Frame's focus is unexpectedly pulled away by the host OS's GUI. There are some WIP events handlers to assuage the worst of these issues
+  
+3)Completely encapsulated checking of matching pairs of draggable buttons and their drop targets
+
+  Checking for matches between the buttons being dragged and their target buttons is integrated into the drag and drop event cycle. Because all of this is instanced when a MatchPair object is created, the correct pairs of buttons will always only enter a matched state with each other, meaning checking for matches is achievable entirely within a single object without requiring cross-talk between non-matching pairs.
   
 __UP NEXT__: The match checking cycle can be greatly simplified and refined. Should add parameters to explicitly pass sizers and other key members of parent Frame to MatchPair object, in order to adapt MatchPair to other parent GUI structures.
 
