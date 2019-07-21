@@ -6,12 +6,13 @@
 Major refinement of function.
 Several superfluous classes have been removed and integrated into a single class called MatchPair. DDEngine module just serves as a basic base for launching a bare bones GUI and running main
 
-MatchPair's functionality:
-1)Allows dynamic insertion of matching pairs of buttons into a parent Frame
+*MatchPair's functionality:*
+
+__Allows dynamic insertion of matching pairs of buttons into a parent Frame
 
   Achieved by creating instances of MatchPair that receive a parent Frame parameter
   
-2)Facilitates a custom drag and drop cycle
+__Facilitates a custom drag and drop cycle
 
   Uses a separate Frame to visually represent dragging without actually affecting the position of the buttons in the parent Frame
   
@@ -19,9 +20,9 @@ MatchPair's functionality:
   
   However, this also requires handing events off from the original button object to events bound to the new Frame's child button
   
-  Concerns: there can be glitchy behavior when the Frame's focus is unexpectedly pulled away by the host OS's GUI. There are some WIP events handlers to assuage the worst of these issues
+  *Concerns: there can be glitchy behavior when the Frame's focus is unexpectedly pulled away by the host OS's GUI. There are some WIP events handlers to assuage the worst of these issues*
   
-3)Completely encapsulated checking of matching pairs of draggable buttons and their drop targets
+__Completely encapsulated checking of matching pairs of draggable buttons and their drop targets
 
   Checking for matches between the buttons being dragged and their target buttons is integrated into the drag and drop event cycle. Because all of this is instanced when a MatchPair object is created, the correct pairs of buttons will always only enter a matched state with each other, meaning checking for matches is achievable entirely within a single object without requiring cross-talk between non-matching pairs.
   
